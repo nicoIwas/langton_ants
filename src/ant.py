@@ -47,7 +47,4 @@ class Ant:
                         self.position = (self.position[0], self.position[1] - 1)
                         self.direction = "l"
             case _:
-                pass
-
-        if self.position[0]             
-        
+                pass        
