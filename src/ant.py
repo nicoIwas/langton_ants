@@ -3,12 +3,13 @@
 from typing import Literal
 ##########################
 
-class ant:
+class Ant:
 
-    def __init__(self, starting_position: tuple[int, int] = (0, 0), starting_direction: Literal["r", "l", "u", "d"] = "r"):
+    def __init__(self, starting_position: tuple[int, int] = (0, 0), starting_direction: Literal["r", "l", "u", "d"] = "r", current_square: int = 0):
 
         self.position = starting_position
         self.direction = starting_direction
+        self.current_square = current_square
 
     def move(self, move_direction: Literal["l", "r"]) -> None:
 
@@ -47,4 +48,6 @@ class ant:
                         self.direction = "l"
             case _:
                 pass
-                    
+
+        if self.position[0]             
+        
