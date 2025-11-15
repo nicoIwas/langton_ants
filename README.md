@@ -22,6 +22,12 @@ To activate it, if your IDE has not already located it as your Python environmen
 source .venv/Scripts/activate 
 ```
 
+If you are using command prompt, you should have an error here. Instead, run:
+
+```cmd
+.venv/Scripts/activate 
+```
+
 Finally, you need to install the necessary dependencies. Run on your bash terminal:
 
 ```bash

@@ -22,6 +22,12 @@ Para ativá-lo, caso sua IDE ainda não o tenha localizado como seu ambiente Pyt
 source .venv/Scripts/activate 
 ```
 
+Se você estiver usando o prompt de comando, você deve ter um erro aqui. Em vez disso, rode:
+
+```cmd
+.venv/Scripts/activate
+```
+
 Por fim, você precisa instalar as dependências necessárias. Rode no terminal bash:
 
 ```bash
