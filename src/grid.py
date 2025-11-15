@@ -3,16 +3,14 @@
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
-from ant import Ant
+from Ant import Ant
 ###################################
 
-class Map:
+class Grid:
 
     def __init__(self, ant: Ant, rows: int = 500, columns: int = 500):
 
-        self.rows = rows
-        self.columns = columns
-        self.anthill = np.zeros((self.rows, self.columns))
+        self.anthill = np.zeros((rows, columns))
         self.ant = ant
     
     def update_ant(self, value: int) -> None:
@@ -72,7 +70,7 @@ class Map:
                 # debug
                 if debug:
                     print(i)
-                    i += 1
+                i += 1
             
             except KeyboardInterrupt:  
                 plt.ioff() # type: ignore
