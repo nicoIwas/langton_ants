@@ -54,27 +54,27 @@ class Map:
                     self.update_ant(1)
                     self.ant.move("l")
 
-                if self.get_ant_position() == 1:
+                elif self.get_ant_position() == 1:
                     self.update_ant(0)
                     self.ant.move("r")
-                
+
+                self.ant.correct_position(self.anthill)
                 self.ant.current_square = self.get_ant_position()
                 self.update_ant(2)
-                
+
                 if i % steps == 0:
                     mat_display.set_data(self.anthill)
                     fig.canvas.draw_idle() # type: ignore
-                    plt.pause(0.5)
+                    plt.pause(0.01)
 
                 self.anthill[self.ant.position[0], self.ant.position[1]] = self.ant.current_square
 
                 # debug
                 if debug:
                     print(i)
-                    print(self.ant.position)
-                i += 1
+                    i += 1
             
-            except KeyboardInterrupt:
+            except KeyboardInterrupt:  
                 plt.ioff() # type: ignore
                 break
         plt.pause(1)

@@ -1,6 +1,7 @@
 # @nicoiwas
 ##########################
 from typing import Literal
+import numpy as np
 ##########################
 
 class Ant:
@@ -48,3 +49,14 @@ class Ant:
                         self.direction = "l"
             case _:
                 pass        
+
+    def correct_position(self, anthill: np.ndarray) -> None:
+
+        x_dimension = len(anthill)
+        y_dimension = len(anthill[0])
+        for idx in range(2):
+            if self.position[idx] < 0:
+                self.position = (len(anthill) + self.position[idx], self.position[1]) if idx == 0 else (self.position[0], len(anthill[idx]) + self.position[idx])
+            
+            elif (self.position[idx] >= x_dimension and idx == 0) or (self.position[idx] >= y_dimension and idx == 1):
+                self.position = (self.position[idx] - len(anthill), self.position[1]) if idx == 0 else (self.position[0], self.position[idx] - len(anthill))
