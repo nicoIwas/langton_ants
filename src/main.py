@@ -6,6 +6,7 @@ from Ant import Ant
 
 if __name__ == "__main__":
 
-    ant = Ant((125, 125))
-    anthill = Grid(ant, 250, 250)
-    anthill.simulate(steps=125, debug=True)
+    ant_1 = Ant((57, 119), "r")
+    ant_2 = Ant((57, 120), "r")
+    anthill = Grid([ant_1, ant_2], 116, 240)
+    anthill.simulate(steps=100, debug=True)

@@ -11,6 +11,7 @@ class Ant:
         self.position = starting_position
         self.direction = starting_direction
         self.current_square = current_square
+        self.move_buffer: Literal["l", "r"] = "l"
 
     def move(self, move_direction: Literal["l", "r"]) -> None:
 
