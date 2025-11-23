@@ -8,23 +8,23 @@ from Ant import Ant
 
 class Grid:
 
-    def __init__(self, ant_list: list[Ant], rows: int = 500, columns: int = 500):
+    def __init__(self, ant_list: list[Ant], columns: int = 500, rows: int = 500):
 
         self.anthill = np.zeros((rows, columns))
         self.ant_list = ant_list
     
     def update_ant(self, value: int, index: int) -> None:
 
-        self.anthill[self.ant_list[index].position[0]][self.ant_list[index].position[1]] = value
+        self.anthill[self.ant_list[index].position[1]][self.ant_list[index].position[0]] = value
     
     def get_ant_position(self, index: int) -> int:
         
-        return self.anthill[self.ant_list[index].position[0]][self.ant_list[index].position[1]]
+        return self.anthill[self.ant_list[index].position[1]][self.ant_list[index].position[0]]
     
     def simulate(self, steps: int = 1, debug: bool = False) -> None:
 
         # cores dos pontos: 0 / 1 / formiga
-        colors = ["black", "white", "red"]
+        colors = ["white", "black", "red"]
         # intervalos de cores (respectivamente)
         boundaries = [-0.5, 0.5, 1.5, 2.5]
         # linkando o colormap
@@ -67,6 +67,8 @@ class Grid:
                     #####
                     self.ant_list[i].correct_position(self.anthill)
                     self.ant_list[i].current_square = self.get_ant_position(i)
+                
+                for i in range(len(self.ant_list)):
                     self.update_ant(2, i)
 
                 if index % steps == 0:
@@ -75,11 +77,15 @@ class Grid:
                     plt.pause(0.01)
                 
                 for i in range(len(self.ant_list)):
-                    self.anthill[self.ant_list[i].position[0], self.ant_list[i].position[1]] = self.ant_list[i].current_square
+                    self.anthill[self.ant_list[i].position[1]][self.ant_list[i].position[0]] = self.ant_list[i].current_square
 
                 # debug
                 if debug:
+
                     print(index)
+                    for agent in self.ant_list: print(agent.position)
+                                    
+
                 index += 1
             
             except KeyboardInterrupt:  
