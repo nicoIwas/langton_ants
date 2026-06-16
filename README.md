@@ -65,7 +65,7 @@ def __init__(self, starting_position: tuple[int, int] = (0, 0), starting_directi
 
     self.position = starting_position
     self.direction = starting_direction
-    self.current_square = current_square
+    self.current_position = current_square
 ```
 
 The ant has some attributes that will influence its behavior. For each attribute, there are some conditions to it.
@@ -79,7 +79,7 @@ The ant has some attributes that will influence its behavior. For each attribute
      * `"l"` stands for **LEFT**;
      * `"u"` stands for **UP**;
      * `"d"` stands for **DOWN**.
-  3. `self.current_square`: This attribute is the reading of the ant for the current square it is standing on. If you choose (for whatever reason) to start with a not completely black lattice, this argument should have a proper use, but it should not be used. In further implementations, it will be discontinued as a parameter of the constructor.
+  3. `self.current_position`: This attribute is the reading of the ant for the current square it is standing on. If you choose (for whatever reason) to start with a not completely black lattice, this argument should have a proper use, but it should not be used. In further implementations, it will be discontinued as a parameter of the constructor.
 
 The anthill variable is the grid lattice where the code runs. If you want to change the initial configuration, understand the following:
 

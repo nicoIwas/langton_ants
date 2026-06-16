@@ -65,7 +65,7 @@ def __init__(self, starting_position: tuple[int, int] = (0, 0), starting_directi
 
     self.position = starting_position
     self.direction = starting_direction
-    self.current_square = current_square
+    self.current_position = current_square
 ```
 
 A formiga possui alguns atributos que influenciam seu comportamento. Para cada atributo, existem algumas condições.
@@ -79,7 +79,7 @@ A formiga possui alguns atributos que influenciam seu comportamento. Para cada a
      * `"l"` significa **ESQUERDA**;
      * `"u"` significa **CIMA**;
      * `"d"` significa **BAIXO**.
-  3. `self.current_square`: Este atributo é a leitura da formiga para o quadrado atual em que ela está. Se você escolher (por algum motivo) começar com uma malha que não é completamente preta, este argumento pode ter algum uso, mas não deve ser usado. Em futuras implementações, ele será removido como parâmetro do construtor.
+  3. `self.current_position`: Este atributo é a leitura da formiga para o quadrado atual em que ela está. Se você escolher (por algum motivo) começar com uma malha que não é completamente preta, este argumento pode ter algum uso, mas não deve ser usado. Em futuras implementações, ele será removido como parâmetro do construtor.
 
 A variável anthill é a grade onde o código roda. Se você quiser alterar a configuração inicial, entenda o seguinte:
 

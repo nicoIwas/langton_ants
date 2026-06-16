@@ -1,0 +1,65 @@
+{
+    "nicolas": {
+        "top": 2,
+        "jg": -1,
+        "mid": 0,
+        "adc": 1,
+        "sup": 0
+    },
+    "anjos": {
+        "top": 0,
+        "jg": 0,
+        "mid": 2,
+        "adc": 1,
+        "sup": 2
+    },
+    "arthur": {
+        "top": 2,
+        "jg": 1,
+        "mid": -1,
+        "adc": 0,
+        "sup": 0
+    },
+    "jose": {
+        "top": 1,
+        "jg": 2,
+        "mid": 0,
+        "adc": -1,
+        "sup": 0
+    },
+    "mister": {
+        "top": -1,
+        "jg": 0,
+        "mid": 2,
+        "adc": 1,
+        "sup": 0
+    },
+    "guilherme": {
+        "top": 0,
+        "jg": 1,
+        "mid": 1,
+        "adc": 2,
+        "sup": -1
+    },
+    "lucas": {
+        "top": 0,
+        "jg": -1,
+        "mid": 1,
+        "adc": 0,
+        "sup": 2
+    },
+    "ferry": {
+        "top": 1,
+        "jg": 0,
+        "mid": 0,
+        "adc": -1,
+        "sup": 2
+    },
+    "vinicius": {
+        "top": 1,
+        "jg": 0,
+        "mid": -1,
+        "adc": 0,
+        "sup": 2
+    }
+}
