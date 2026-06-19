@@ -1,25 +1,22 @@
 # @nicoiwas
 ###################################
-from ty_extensions import Unknown
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
 from src.ants.Ant import Ant
 ###################################
 
-class Grid:
+class Anthill:
 
-    def __init__(self, ant_list: list[Ant], columns: int = 500, rows: int = 500):
-
+    def __init__(self, columns: int = 500, rows: int = 500):
         # map itself (anthill... get it?)
         self._anthill: np.ndarray[tuple[int, int], np.dtype[np.float64]] = np.zeros(shape=(rows, columns))
-        # the possibility of having the ants as a map for the grid to iterate on makes it easier to deal with everything
-        self.ant_list: list[Ant] = ant_list
-    
+        self.raw = self._anthill
+
     @property
     def anthill(self) -> np.ndarray:
         return self._anthill
-
+    
     def __getitem__(self, position: tuple[int, int]) -> int:
 
         x, y = position
@@ -30,13 +27,23 @@ class Grid:
         x, y = position
         self._anthill[y, x] = value
 
-    def update_ant_position(self, value: int | None = None, index: int = 0) -> None:
+class Grid:
 
-        self.anthill[self.ant_list[index].position[0]][self.ant_list[index].position[1]] = self.ant_list[index].collor_buffer
-    
-    def get_ant_position(self, index: int) -> int:
+    def __init__(self, ant_list: list[Ant], columns: int = 500, rows: int = 500):
+
+        # map itself (anthill... get it?)
+        self.anthill: Anthill = Anthill(columns, rows)
+        # np.ndarray[tuple[int, int], np.dtype[np.float64]] = np.zeros(shape=(rows, columns))
+        # the possibility of having the ants as a map for the grid to iterate on makes it easier to deal with everything
+        self.ant_list: list[Ant] = ant_list
+
+    def update_position(self,  x: int, y: int, value: int) -> None:
         
-        return self.anthill[self.ant_list[index].position[0]][self.ant_list[index].position[1]]
+        self.anthill[x, y] = value
+
+    def get_position(self,  x: int, y: int) -> int:
+        
+        return self.anthill[x, y]
     
     def simulate(self, steps: int = 1, debug: bool = False) -> None:
 
@@ -51,62 +58,70 @@ class Grid:
 
         fig, ax = plt.subplots() 
 
+        # update each ant position to its correspondent color
         for i in range(len(self.ant_list)):
-            self.update_ant_position(2, i)
+            
+            x, y = self.ant_list[i].position
+            self.ant_list[i].current_square = self.get_position(x, y)
+
+        # update each ant position to its correspondent color
+        for i in range(len(self.ant_list)):
+            x, y = self.ant_list[i].position
+            self.update_position(x, y, value=2)
+            
         
         # rework is actually on the way
-        mat_display = ax.matshow(self.anthill, cmap=cmap, norm=norm)
+        mat_display = ax.matshow(self.anthill.raw, cmap=cmap, norm=norm, origin='lower')
         
         plt.ion()
         plt.show()
-        
+        plt.pause(3)
+
         for i in range(len(self.ant_list)):
-            self.update_ant_position(self.ant_list[i].current_position, i)
+
+            x, y = self.ant_list[i].position
+
+            self.update_position(x, y, self.ant_list[i].current_square)
 
 
         index = 0
         while True:
             try:
-                
-                # now, each A(ge)NT will handle its own movement; it will only be passed as a parameter the current color
+                # now, each A(ge)NT will handle its own movement;
                 for i in range(len(self.ant_list)):
                     
-                    self.ant_list[i].collor_buffer = self.get_ant_position(i)
-                    # : Unknown = current
-                    # if self.get_ant_position(i) == 0:
-                    #     self.update_ant_position(1, i)
-                    #     self.ant_list[i].move_buffer = "l"
+                    x, y = self.ant_list[i].position
+                    
+                    self.ant_list[i].current_square = self.get_position(x, y)
+                    
+                    new_square_color = self.ant_list[i].move()
+                    self.update_position(x, y, value=new_square_color)
 
-                    # elif self.get_ant_position(i) == 1:
-                    #     self.update_ant_position(0, i)
-                    #     self.ant_list[i].move_buffer = "r"
+                    self.ant_list[i].correct_position(self.anthill.raw)
+
+                    new_x, new_y = self.ant_list[i].position
                     
-                
-                for i in range(len(self.ant_list)):
-                    self.update_ant_position(index=i) # turn to it correct color
-                    self.ant_list[i].move()
-                
-                for i in range(len(self.ant_list)):
-                    #####
-                    self.ant_list[i].correct_position(self.anthill)
-                    self.ant_list[i].current_position: int = self.get_ant_position(index=i)
-                
-                for i in range(len(self.ant_list)):
-                    self.update_ant_position(2, i)
+                    self.ant_list[i].current_square = self.get_position(new_x, new_y)
+                    
+                    self.update_position(new_x, new_y, 2)
 
                 if index % steps == 0:
-                    mat_display.set_data(self.anthill)
+                    mat_display.set_data(self.anthill.raw)
                     fig.canvas.draw_idle()
                     plt.pause(0.01)
                 
                 for i in range(len(self.ant_list)):
-                    self.anthill[self.ant_list[i].position[1]][self.ant_list[i].position[0]] = self.ant_list[i].current_position
+                    
+                    x: int = self.ant_list[i].position[0]
+                    y: int = self.ant_list[i].position[1]
+
+                    self.anthill[x, y] = self.ant_list[i].current_square
 
                 # debug
                 if debug:
-
                     print(index)
-                    for agent in self.ant_list: print(agent.position)
+                    for agent in self.ant_list: 
+                        print(agent.position)
                                     
 
                 index += 1

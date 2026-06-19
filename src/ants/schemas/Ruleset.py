@@ -6,8 +6,9 @@ from typing import Literal, TypedDict
 class Rule(TypedDict):
     
     turn: Literal["R", "L", "U", "D"]
-    next_state: int
+    color_change: int
 
-class State(TypedDict):
+class Ruleset(TypedDict):
     
-    state: dict[int, Rule]
+    current_color: dict[int, Rule]
+

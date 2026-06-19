@@ -1,28 +1,30 @@
 # @nicoiwas
 ##########################
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Literal
 import numpy as np
-from src.ants.State import State
+from src.ants.schemas.Ruleset import Ruleset, Rule
 ##########################
 
 class Ant(ABC):
 
-    def __init__(self, starting_position: tuple[int, int] = (0, 0), starting_direction: Literal["R", "L", "U", "D"] = "R", current_square: int = 0, state: State = {0: {"turn": "l", "next_state": 1}}):
+    def __init__(self, 
+                starting_position: tuple[int, int] = (0, 0), 
+                starting_direction: Literal["R", "L", "U", "D"] = "R", 
+                # current_square: int = 0, 
+                ruleset: Ruleset = Ruleset(current_color={0: Rule(turn="L", color_change=1), 1: Rule(turn="R", color_change=0)})
+    ):
 
         self.position: tuple[int, int] = starting_position
-        self.direction = starting_direction
-        self.color = None
+        self.direction: Literal["R", "L", "U", "D"] = starting_direction
+        # self.color = 2
+        self.ruleset: Ruleset = ruleset
+        self.current_square: int = 0 # current_square
+        self.color_buffer: int = 0
 
-        self.state = state
-        # self.current_position: int = current_square
-        # self.state: list[Literal["R", "L", "U", "D"]] = state
-        # self.current_state_index = 0
+    def move(self) -> int:
 
-        
-    def move(self) -> None:
-
-        move_direction: list[Literal["R", "L", "U", "D"]] = self.state
+        move_direction: Literal["R", "L", "U", "D"] = self.ruleset["current_color"][self.current_square]["turn"]
 
         match move_direction:
 
@@ -38,11 +40,11 @@ class Ant(ABC):
             case "D": 
                 self.move_down()
 
-        
+        return self.ruleset["current_color"][self.current_square]["color_change"]
+ 
     def move_up(self) -> None:
 
-        x: int = self.position[0]
-        y: int = self.position[1]
+        x, y = self.position
 
         match self.direction:
 
@@ -64,8 +66,7 @@ class Ant(ABC):
     
     def move_down(self) -> None:
 
-        x: int = self.position[0]
-        y: int = self.position[1]
+        x, y = self.position
 
         match self.direction:
 
@@ -87,8 +88,7 @@ class Ant(ABC):
 
     def move_left(self) -> None:
 
-        x: int = self.position[0]
-        y: int = self.position[1]
+        x, y = self.position
 
         match self.direction:
 
@@ -110,8 +110,7 @@ class Ant(ABC):
 
     def move_right(self) -> None:
 
-        x: int = self.position[0]
-        y: int = self.position[1]
+        x, y = self.position
 
         match self.direction:
 
@@ -137,8 +136,7 @@ class Ant(ABC):
         x_dimension = len(anthill[0])
         y_dimension = len(anthill)
 
-        x_position = self.position[0]
-        y_position = self.position[1]
+        x_position, y_position = self.position
 
         # verifying x position to see if it checks on the necessary conditions
         if x_position < 0 or x_position >= x_dimension:
