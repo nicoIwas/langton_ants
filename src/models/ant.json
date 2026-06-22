@@ -1,0 +1,15 @@
+{
+    "color": 2,
+    "rules": [
+        {
+            "color_source": 0,
+            "turn": "L",
+            "color_change": 1
+        },
+        {
+            "color_source": 1,
+            "turn": "R",
+            "color_change": 0
+        }
+    ]
+}

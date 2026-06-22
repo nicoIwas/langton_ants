@@ -9,6 +9,6 @@ class Rule(TypedDict):
     color_change: int
 
 class Ruleset(TypedDict):
-    
+    ant_color: int
     current_color: dict[int, Rule]
 

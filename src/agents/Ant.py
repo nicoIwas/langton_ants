@@ -1,28 +1,48 @@
 # @nicoiwas
-##########################
-from abc import ABC
-from typing import Literal
+###############################################
+import json
 import numpy as np
-from src.ants.schemas.Ruleset import Ruleset, Rule
-##########################
+from src.schemas.Ruleset import Ruleset, Rule
+from src.schemas.Models import Model, ModelRule
+from typing import Literal
+###############################################
 
-class Ant(ABC):
+# this is a abstract class. the idea is to create agents based on this 
+class Ant:
 
     def __init__(self, 
                 starting_position: tuple[int, int] = (0, 0), 
                 starting_direction: Literal["R", "L", "U", "D"] = "R", 
-                # current_square: int = 0, 
-                ruleset: Ruleset = Ruleset(current_color={0: Rule(turn="L", color_change=1), 1: Rule(turn="R", color_change=0)})
+                # ruleset_path: str = "src/models/ant.json"
+                ruleset: Ruleset | str = Ruleset(ant_color=2, current_color={0: Rule(turn="L", color_change=1), 1: Rule(turn="R", color_change=0)})
     ):
 
         self.position: tuple[int, int] = starting_position
         self.direction: Literal["R", "L", "U", "D"] = starting_direction
-        # self.color = 2
-        self.ruleset: Ruleset = ruleset
-        self.current_square: int = 0 # current_square
+        self.current_square: int = 0 
+        
         self.color_buffer: int = 0
+        self.position_buffer: tuple[int, int] = starting_position
 
-    def move(self) -> int:
+        if isinstance(ruleset, str):
+            self.ruleset: Ruleset = self.load_ruleset(ruleset)
+        else:
+            self.ruleset: Ruleset = ruleset
+
+    def load_ruleset(self, filepath: str) -> Ruleset:
+        
+        with open(filepath, "r", encoding="utf-8") as file:
+            ruleset_data: Model = json.load(file)
+        
+        ant_color: int = ruleset_data["color"]
+        
+        rule_dict: dict[int, Rule] = {}
+        for rule in ruleset_data["rules"]:
+            rule_dict[rule["color_source"]] = Rule(turn=rule["turn"], color_change=rule["color_change"])
+        
+        return Ruleset(ant_color=ant_color, current_color=rule_dict)
+
+    def move(self) -> None:
 
         move_direction: Literal["R", "L", "U", "D"] = self.ruleset["current_color"][self.current_square]["turn"]
 
@@ -40,7 +60,6 @@ class Ant(ABC):
             case "D": 
                 self.move_down()
 
-        return self.ruleset["current_color"][self.current_square]["color_change"]
  
     def move_up(self) -> None:
 

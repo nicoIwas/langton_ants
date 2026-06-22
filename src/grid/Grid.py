@@ -3,7 +3,7 @@
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
-from src.ants.Ant import Ant
+from src.agents.Ant import Ant
 ###################################
 
 class Anthill:
@@ -48,9 +48,9 @@ class Grid:
     def simulate(self, steps: int = 1, debug: bool = False) -> None:
 
         # cores dos pontos: 0 / 1 / formiga
-        colors = ["white", "black", "red"]
+        colors = ["white", "black", "red", "blue"]
         # intervalos de cores (respectivamente)
-        boundaries = [-0.5, 0.5, 1.5, 2.5]
+        boundaries = [-0.5, 0.5, 1.5, 2.5, 3.5]
         
         # linkando o colormap
         cmap = mcolors.ListedColormap(colors)
@@ -67,7 +67,7 @@ class Grid:
         # update each ant position to its correspondent color
         for i in range(len(self.ant_list)):
             x, y = self.ant_list[i].position
-            self.update_position(x, y, value=2)
+            self.update_position(x, y, value=self.ant_list[i].ruleset["ant_color"])
             
         
         # rework is actually on the way
@@ -77,12 +77,10 @@ class Grid:
         plt.show()
         plt.pause(3)
 
+        # throwback the grid colors to not have ant colors
         for i in range(len(self.ant_list)):
-
             x, y = self.ant_list[i].position
-
             self.update_position(x, y, self.ant_list[i].current_square)
-
 
         index = 0
         while True:
@@ -91,19 +89,32 @@ class Grid:
                 for i in range(len(self.ant_list)):
                     
                     x, y = self.ant_list[i].position
-                    
                     self.ant_list[i].current_square = self.get_position(x, y)
                     
-                    new_square_color = self.ant_list[i].move()
-                    self.update_position(x, y, value=new_square_color)
+                for i in range(len(self.ant_list)):
 
+                    x, y = self.ant_list[i].position
+                    self.ant_list[i].move()
+                    self.ant_list[i].color_buffer = self.get_position(x, y)
+                    self.ant_list[i].position_buffer = (x, y)
+                
+                # update past position
+                for i in range(len(self.ant_list)):
+
+                    bufferd_x, buffered_y = self.ant_list[i].position_buffer
+                    previous_square_color = self.ant_list[i].ruleset["current_color"][self.ant_list[i].current_square]["color_change"]
+                    
+                    self.update_position(bufferd_x, buffered_y, value=previous_square_color)
                     self.ant_list[i].correct_position(self.anthill.raw)
+                    
 
-                    new_x, new_y = self.ant_list[i].position
-                    
-                    self.ant_list[i].current_square = self.get_position(new_x, new_y)
-                    
-                    self.update_position(new_x, new_y, 2)
+                for i in range(len(self.ant_list)):
+                    x, y = self.ant_list[i].position
+                    self.ant_list[i].current_square = self.get_position(x, y)
+                
+                for i in range(len(self.ant_list)):
+                    x, y = self.ant_list[i].position
+                    self.update_position(x, y, self.ant_list[i].ruleset["ant_color"])
 
                 if index % steps == 0:
                     mat_display.set_data(self.anthill.raw)
@@ -112,10 +123,8 @@ class Grid:
                 
                 for i in range(len(self.ant_list)):
                     
-                    x: int = self.ant_list[i].position[0]
-                    y: int = self.ant_list[i].position[1]
-
-                    self.anthill[x, y] = self.ant_list[i].current_square
+                    x, y  = self.ant_list[i].position
+                    self.update_position(x, y, self.ant_list[i].current_square)
 
                 # debug
                 if debug:
