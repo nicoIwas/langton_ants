@@ -1,31 +1,10 @@
 # @nicoiwas
-###################################
+####################################
+from src.agents.Ant import Ant
+from src.grid.Anthill import Anthill
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
-import numpy as np
-from src.agents.Ant import Ant
-###################################
-
-class Anthill:
-
-    def __init__(self, columns: int = 500, rows: int = 500):
-        # map itself (anthill... get it?)
-        self._anthill: np.ndarray[tuple[int, int], np.dtype[np.float64]] = np.zeros(shape=(rows, columns))
-        self.raw = self._anthill
-
-    @property
-    def anthill(self) -> np.ndarray:
-        return self._anthill
-    
-    def __getitem__(self, position: tuple[int, int]) -> int:
-
-        x, y = position
-        return self._anthill[y, x]
-
-    def __setitem__(self, position: tuple[int, int], value: int) -> None:
-
-        x, y = position
-        self._anthill[y, x] = value
+####################################
 
 class Grid:
 
@@ -33,14 +12,15 @@ class Grid:
 
         # map itself (anthill... get it?)
         self.anthill: Anthill = Anthill(columns, rows)
-        # np.ndarray[tuple[int, int], np.dtype[np.float64]] = np.zeros(shape=(rows, columns))
         # the possibility of having the ants as a map for the grid to iterate on makes it easier to deal with everything
         self.ant_list: list[Ant] = ant_list
 
+    # update position of the antill interface with the passed value
     def update_position(self,  x: int, y: int, value: int) -> None:
         
         self.anthill[x, y] = value
 
+    # get value at defined position, x as collumn and y as row
     def get_position(self,  x: int, y: int) -> int:
         
         return self.anthill[x, y]
@@ -74,7 +54,7 @@ class Grid:
         mat_display = ax.matshow(self.anthill.raw, cmap=cmap, norm=norm, origin='lower')
         
         plt.ion()
-        plt.show()
+        plt.draw()
         plt.pause(3)
 
         # throwback the grid colors to not have ant colors
@@ -117,10 +97,13 @@ class Grid:
                     self.update_position(x, y, self.ant_list[i].ruleset["ant_color"])
 
                 if index % steps == 0:
-                    mat_display.set_data(self.anthill.raw)
-                    fig.canvas.draw_idle()
-                    plt.pause(0.01)
-                
+                    if plt.fignum_exists(fig.number):
+                        mat_display.set_data(self.anthill.raw)
+                        fig.canvas.draw_idle()
+                        plt.pause(0.01)
+                    else:
+                        raise Exception(">Closed Canvas; Stopping simulation")
+
                 for i in range(len(self.ant_list)):
                     
                     x, y  = self.ant_list[i].position
@@ -131,11 +114,10 @@ class Grid:
                     print(index)
                     for agent in self.ant_list: 
                         print(agent.position)
-                                    
 
                 index += 1
-            
-            except KeyboardInterrupt:  
+            # maybe add interactive actions here... what about a cli app?
+            except Exception:
                 plt.ioff()
                 break
         plt.pause(1)
