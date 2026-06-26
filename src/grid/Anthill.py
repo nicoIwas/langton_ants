@@ -7,7 +7,7 @@ class Anthill:
 
     def __init__(self, columns: int = 500, rows: int = 500):
         # map itself (anthill... get it?)
-        self._anthill: np.ndarray[tuple[int, int], np.dtype[np.float64]] = np.zeros(shape=(rows, columns))
+        self._anthill: np.ndarray[tuple[int, int], np.dtype[np.float64]] = np.zeros(shape=(rows, columns), dtype=np.uint8)
         self.raw = self._anthill
 
     @property

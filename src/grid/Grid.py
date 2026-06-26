@@ -28,13 +28,13 @@ class Grid:
     def simulate(self, steps: int = 1, debug: bool = False) -> None:
 
         # cores dos pontos: 0 / 1 / formiga
-        colors = ["white", "black", "red", "blue"]
-        # intervalos de cores (respectivamente)
-        boundaries = [-0.5, 0.5, 1.5, 2.5, 3.5]
+        # colors = ["white", "black", "red", "blue"]
+        # # intervalos de cores (respectivamente)
+        # boundaries = [-0.5, 0.5, 1.5, 2.5, 3.5]
         
         # linkando o colormap
-        cmap = mcolors.ListedColormap(colors)
-        norm = mcolors.BoundaryNorm(boundaries, ncolors=cmap.N)
+        # cmap = mcolors.ListedColormap(colors)
+        # norm = mcolors.BoundaryNorm(boundaries, ncolors=cmap.N)
 
         fig, ax = plt.subplots() 
 
@@ -51,7 +51,7 @@ class Grid:
             
         
         # rework is actually on the way
-        mat_display = ax.matshow(self.anthill.raw, cmap=cmap, norm=norm, origin='lower')
+        mat_display = ax.matshow(self.anthill.raw, cmap="nipy_spectral", origin='lower')
         
         plt.ion()
         plt.draw()
